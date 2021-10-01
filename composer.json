@@ -11,7 +11,7 @@
   ],
   "autoload": {
     "files": [
-      "src/helper.php"
+      "src/helpers.php"
     ],
     "psr-4": {
       "Max\\Utils\\": "src/"
