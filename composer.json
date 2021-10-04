@@ -19,7 +19,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Max\\Tests\\": "tests/"
+      "Max\\Utils\\Tests\\": "tests/"
     }
   },
   "require": {
