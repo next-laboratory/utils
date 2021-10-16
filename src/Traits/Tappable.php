@@ -2,6 +2,10 @@
 
 namespace Max\Utils\Traits;
 
+/**
+ * Most of the methods in this file come from illuminate
+ * thanks Laravel Team provide such a useful class.
+ */
 trait Tappable
 {
     /**

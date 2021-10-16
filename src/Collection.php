@@ -5,14 +5,14 @@ namespace Max\Utils;
 use ArrayAccess;
 use ArrayIterator;
 use Max\Utils\Contracts\Enumerable;
-use Max\Utils\Exception\ItemNotFoundException;
-use Max\Utils\Exception\MultipleItemsFoundException;
+use Max\Utils\Exceptions\ItemNotFoundException;
+use Max\Utils\Exceptions\MultipleItemsFoundException;
 use Max\Utils\Traits\EnumeratesValues;
 use Max\Utils\Traits\Macroable;
 use stdClass;
 
 /**
- * Most of the methods in this file come from illuminate/support,
+ * Most of the methods in this file come from illuminate
  * thanks Laravel Team provide such a useful class.
  */
 class Collection implements ArrayAccess, Enumerable

@@ -6,6 +6,10 @@ use ArrayAccess;
 use ArrayObject;
 use Max\Utils\Traits\Macroable;
 
+/**
+ * Most of the methods in this file come from illuminate
+ * thanks Laravel Team provide such a useful class.
+ */
 class Optional implements ArrayAccess
 {
     use Macroable {

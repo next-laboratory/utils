@@ -11,7 +11,7 @@ use Ramsey\Uuid\UuidFactory;
 use voku\helper\ASCII;
 
 /**
- * Most of the methods in this file come from illuminate/support,
+ * Most of the methods in this file come from illuminate
  * thanks Laravel Team provide such a useful class.
  */
 class Str

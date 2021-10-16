@@ -1,6 +1,6 @@
 <?php
 
-namespace Max\Utils\Exception;
+namespace Max\Utils\Exceptions;
 
 use RuntimeException;
 

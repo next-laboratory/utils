@@ -9,6 +9,10 @@ use Max\Utils\Traits\Tappable;
 use JsonSerializable;
 use Symfony\Component\VarDumper\VarDumper;
 
+/**
+ * Most of the methods in this file come from illuminate
+ * thanks Laravel Team provide such a useful class.
+ */
 class Stringable implements JsonSerializable
 {
     use Conditionable, Macroable, Tappable;

@@ -6,7 +6,7 @@ namespace Max\Utils;
 use Max\Collection;
 
 /**
- * Most of the methods in this file come from illuminate/filesystem,
+ * Most of the methods in this file come from illuminate
  * thanks Laravel Team provide such a useful class.
  */
 class Arr

@@ -2,6 +2,10 @@
 
 namespace Max\Utils\Contracts;
 
+/**
+ * Most of the methods in this file come from illuminate
+ * thanks Laravel Team provide such a useful class.
+ */
 interface DeferringDisplayableValue
 {
     /**

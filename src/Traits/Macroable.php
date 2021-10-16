@@ -8,7 +8,7 @@ use ReflectionClass;
 use ReflectionMethod;
 
 /**
- * Most of the methods in this file come from illuminate/support,
+ * Most of the methods in this file come from illuminate
  * thanks Laravel Team provide such a useful class.
  */
 trait Macroable

@@ -4,7 +4,7 @@ namespace Max\Utils;
 
 use ErrorException;
 use FilesystemIterator;
-use Max\Utils\Exception\FileNotFoundException;
+use Max\Utils\Exceptions\FileNotFoundException;
 use Max\Utils\LazyCollection;
 use Max\Utils\Traits\Macroable;
 use RuntimeException;
@@ -14,7 +14,7 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Mime\MimeTypes;
 
 /**
- * Most of the methods in this file come from illuminate/filesystem,
+ * Most of the methods in this file come from illuminate
  * thanks Laravel Team provide such a useful class.
  */
 class Filesystem

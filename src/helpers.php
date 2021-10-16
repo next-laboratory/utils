@@ -6,7 +6,7 @@ use Max\Utils\Contracts\Htmlable;
 use Max\Utils\Optional;
 
 /**
- * Most of the methods in this file come from illuminate/support,
+ * Most of the methods in this file come from illuminate
  * thanks Laravel Team provide such a useful class.
  */
 if (!function_exists('collect')) {

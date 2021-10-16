@@ -17,7 +17,7 @@ use Symfony\Component\VarDumper\VarDumper;
 use Traversable;
 
 /**
- * Most of the methods in this file come from illuminate/support,
+ * Most of the methods in this file come from illuminate
  * thanks Laravel Team provide such a useful class.
  *
  * @property-read HigherOrderCollectionProxy $average
