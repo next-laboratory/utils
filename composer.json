@@ -1,35 +1,35 @@
 {
-  "name": "max/utils",
-  "type": "library",
-  "license": "Apache-2.0",
-  "homepage": "https://www.chengyao.xyz",
-  "authors": [
-    {
-      "name": "chengyao",
-      "email": "bigyao@139.com"
-    }
-  ],
-  "autoload": {
-    "files": [
-      "src/helpers.php"
+    "name": "max/utils",
+    "type": "library",
+    "license": "Apache-2.0",
+    "homepage": "https://www.chengyao.xyz",
+    "authors": [
+        {
+            "name": "chengyao",
+            "email": "bigyao@139.com"
+        }
     ],
-    "psr-4": {
-      "Max\\Utils\\": "src/"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Max\\Utils\\Tests\\": "tests/"
-    }
-  },
-  "require": {
-    "php": "^7.4|^8.0"
-  },
-  "suggest": {
-    "ramsey/uuid": "^4.2",
-    "voku/portable-ascii": "^1.5",
-    "league/commonmark": "^2.0"
-  },
-  "minimum-stability": "dev",
-  "prefer-stable": true
+    "autoload": {
+        "files": [
+            "src/helpers.php"
+        ],
+        "psr-4": {
+            "Max\\Utils\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Max\\Utils\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": "^7.4|^8.0"
+    },
+    "suggest": {
+        "ramsey/uuid": "^4.2",
+        "voku/portable-ascii": "^1.5",
+        "league/commonmark": "^2.0"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
