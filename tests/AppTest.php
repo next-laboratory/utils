@@ -3,7 +3,7 @@
 namespace Max\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Max\App;
+use Max\Foundation\App;
 
 class AppTest extends TestCase
 {
