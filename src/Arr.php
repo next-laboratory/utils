@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Max\Utils;
 
 use Max\Collection;
+use ArrayAccess;
 
 /**
  * Most of the methods in this file come from illuminate
@@ -13,6 +14,7 @@ class Arr
 {
     /**
      * Determine whether the given value is array accessible.
+     *
      * @param mixed $value
      */
     public static function accessible($value): bool
@@ -22,6 +24,7 @@ class Arr
 
     /**
      * Add an element to an array using "dot" notation if it doesn't exist.
+     *
      * @param mixed $value
      */
     public static function add(array $array, string $key, $value): array
@@ -74,6 +77,7 @@ class Arr
      * Divide an array into two arrays. One with keys and the other with values.
      *
      * @param array $array
+     *
      * @return array
      */
     public static function divide($array)
@@ -112,7 +116,7 @@ class Arr
      * Determine if the given key exists in the provided array.
      *
      * @param array|\ArrayAccess $array
-     * @param int|string $key
+     * @param int|string         $key
      */
     public static function exists($array, $key): bool
     {
@@ -160,6 +164,7 @@ class Arr
 
     /**
      * Flatten a multi-dimensional array into a single level.
+     *
      * @param float|int $depth
      */
     public static function flatten(array $array, $depth = INF): array
@@ -215,8 +220,8 @@ class Arr
      * Get an item from an array using "dot" notation.
      *
      * @param array|\ArrayAccess $array
-     * @param null|int|string $key
-     * @param mixed $default
+     * @param null|int|string    $key
+     * @param mixed              $default
      */
     public static function get($array, $key = null, $default = null)
     {
@@ -246,7 +251,7 @@ class Arr
      * Check if an item or items exist in an array using "dot" notation.
      *
      * @param array|\ArrayAccess $array
-     * @param null|array|string $keys
+     * @param null|array|string  $keys
      */
     public static function has($array, $keys): bool
     {
@@ -299,7 +304,7 @@ class Arr
     /**
      * Pluck an array of values from an array.
      *
-     * @param array|string $value
+     * @param array|string      $value
      * @param null|array|string $key
      */
     public static function pluck(array $array, $value, $key = null): array
@@ -326,8 +331,9 @@ class Arr
 
     /**
      * Push an item onto the beginning of an array.
+     *
      * @param null|mixed $key
-     * @param mixed $value
+     * @param mixed      $value
      */
     public static function prepend(array $array, $value, $key = null): array
     {
@@ -382,7 +388,7 @@ class Arr
      * If no key is given to the method, the entire array will be replaced.
      *
      * @param null|int|string $key
-     * @param mixed $value
+     * @param mixed           $value
      */
     public static function set(array &$array, $key, $value): array
     {
@@ -470,6 +476,7 @@ class Arr
 
     /**
      * If the given value is not an array and not null, wrap it in one.
+     *
      * @param mixed $value
      */
     public static function wrap($value): array
@@ -528,7 +535,7 @@ class Arr
     /**
      * Explode the "value" and "key" arguments passed to "pluck".
      *
-     * @param array|string $value
+     * @param array|string      $value
      * @param null|array|string $key
      */
     protected static function explodePluckParameters($value, $key): array
