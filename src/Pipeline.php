@@ -101,7 +101,7 @@ class Pipeline
      *
      * @return Closure
      */
-    protected function prepareDestination(Closure $destination): Closure
+    protected function prepareDestination(Closure $destination)
     {
         return static function($passable) use ($destination) {
             return $destination($passable);
@@ -111,7 +111,7 @@ class Pipeline
     /**
      * @return Closure
      */
-    protected function carry(): Closure
+    protected function carry()
     {
         return function($stack, $pipe) {
             return function($passable) use ($stack, $pipe) {
