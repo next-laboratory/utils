@@ -54,7 +54,7 @@ class Pipeline
      *
      * @return $this
      */
-    public function send($passable): static
+    public function send($passable)
     {
         $this->passable = $passable;
 
@@ -64,7 +64,7 @@ class Pipeline
     /**
      * Set the method to call on the pipes.
      */
-    public function via(string $method): static
+    public function via(string $method)
     {
         $this->method = $method;
 
@@ -76,7 +76,7 @@ class Pipeline
      *
      * @return $this
      */
-    public function through(array $pipes): static
+    public function through(array $pipes)
     {
         $this->pipes = is_array($pipes) ? $pipes : func_get_args();
 
