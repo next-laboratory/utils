@@ -31,8 +31,6 @@ class Pipeline
     protected object $passable;
 
     /**
-     * 调用的方法
-     *
      * @var string
      */
     protected string $method = 'handle';
@@ -48,8 +46,6 @@ class Pipeline
     }
 
     /**
-     * 需要穿越管道的对象
-     *
      * @param $passable object
      *
      * @return $this
