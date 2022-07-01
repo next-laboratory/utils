@@ -1,5 +1,10 @@
 <?php
 
+declare(strict_types=1);
+/**
+ * @link     https://github.com/topyao/max-utils
+ * @homepage https://github.com/topyao
+ */
 namespace Max\Utils\Traits;
 
 /**
@@ -13,14 +18,15 @@ trait Conditionable
      *
      * @param mixed $value
      * @param callable $callback
-     * @param callable|null $default
+     * @param null|callable $default
      * @return $this|mixed
      */
     public function when($value, $callback, $default = null)
     {
         if ($value) {
             return $callback($this, $value) ?: $this;
-        } elseif ($default) {
+        }
+        if ($default) {
             return $default($this, $value) ?: $this;
         }
 
@@ -32,14 +38,15 @@ trait Conditionable
      *
      * @param mixed $value
      * @param callable $callback
-     * @param callable|null $default
+     * @param null|callable $default
      * @return $this|mixed
      */
     public function unless($value, $callback, $default = null)
     {
-        if (!$value) {
+        if (! $value) {
             return $callback($this, $value) ?: $this;
-        } elseif ($default) {
+        }
+        if ($default) {
             return $default($this, $value) ?: $this;
         }
 

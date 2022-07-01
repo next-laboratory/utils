@@ -5,10 +5,8 @@ declare(strict_types=1);
  * @link     https://github.com/topyao/max-utils
  * @homepage https://github.com/topyao
  */
-namespace Max\Utils\Exceptions;
+namespace Max\UtilsTest\Cases;
 
-use RuntimeException;
-
-class ItemNotFoundException extends RuntimeException
+class AbstractTestCase extends \PHPUnit\Framework\TestCase
 {
 }

@@ -1,9 +1,14 @@
 <?php
 
+declare(strict_types=1);
+/**
+ * @link     https://github.com/topyao/max-utils
+ * @homepage https://github.com/topyao
+ */
 namespace Max\Utils;
 
-use Max\Utils\Traits\Macroable;
 use League\CommonMark\GithubFlavoredMarkdownConverter;
+use Max\Utils\Traits\Macroable;
 use Ramsey\Uuid\Codec\TimestampFirstCombCodec;
 use Ramsey\Uuid\Generator\CombGenerator;
 use Ramsey\Uuid\Uuid;
@@ -83,7 +88,7 @@ class Str
             return $subject;
         }
 
-        $position = strrpos($subject, (string)$search);
+        $position = strrpos($subject, (string) $search);
 
         if ($position === false) {
             return $subject;
@@ -101,7 +106,7 @@ class Str
      */
     public static function ascii($value, $language = 'en')
     {
-        return ASCII::to_ascii((string)$value, $language);
+        return ASCII::to_ascii((string) $value, $language);
     }
 
     /**
@@ -117,7 +122,7 @@ class Str
             return $subject;
         }
 
-        $result = strstr($subject, (string)$search, true);
+        $result = strstr($subject, (string) $search, true);
 
         return $result === false ? $subject : $result;
     }
@@ -185,7 +190,7 @@ class Str
      */
     public static function contains($haystack, $needles)
     {
-        foreach ((array)$needles as $needle) {
+        foreach ((array) $needles as $needle) {
             if ($needle !== '' && mb_strpos($haystack, $needle) !== false) {
                 return true;
             }
@@ -204,7 +209,7 @@ class Str
     public static function containsAll($haystack, array $needles)
     {
         foreach ($needles as $needle) {
-            if (!static::contains($haystack, $needle)) {
+            if (! static::contains($haystack, $needle)) {
                 return false;
             }
         }
@@ -221,10 +226,10 @@ class Str
      */
     public static function endsWith($haystack, $needles)
     {
-        foreach ((array)$needles as $needle) {
+        foreach ((array) $needles as $needle) {
             if (
                 $needle !== '' && $needle !== null
-                && substr($haystack, -strlen($needle)) === (string)$needle
+                && substr($haystack, -strlen($needle)) === (string) $needle
             ) {
                 return true;
             }
@@ -250,7 +255,7 @@ class Str
     /**
      * Determine if a given string matches a given pattern.
      *
-     * @param string|array $pattern
+     * @param array|string $pattern
      * @param string $value
      * @return bool
      */
@@ -293,7 +298,7 @@ class Str
      */
     public static function isAscii($value)
     {
-        return ASCII::is_ascii((string)$value);
+        return ASCII::is_ascii((string) $value);
     }
 
     /**
@@ -304,7 +309,7 @@ class Str
      */
     public static function isUuid($value)
     {
-        if (!is_string($value)) {
+        if (! is_string($value)) {
             return false;
         }
 
@@ -326,7 +331,7 @@ class Str
      * Return the length of the given string.
      *
      * @param string $value
-     * @param string|null $encoding
+     * @param null|string $encoding
      * @return int
      */
     public static function length($value, $encoding = null)
@@ -378,7 +383,7 @@ class Str
     {
         preg_match('/^\s*+(?:\S++\s*+){1,' . $words . '}/u', $value, $matches);
 
-        if (!isset($matches[0]) || static::length($value) === static::length($matches[0])) {
+        if (! isset($matches[0]) || static::length($value) === static::length($matches[0])) {
             return $value;
         }
 
@@ -389,14 +394,13 @@ class Str
      * Converts GitHub flavored Markdown into HTML.
      *
      * @param string $string
-     * @param array $options
      * @return string
      */
     public static function markdown($string, array $options = [])
     {
         $converter = new GithubFlavoredMarkdownConverter($options);
 
-        return (string)$converter->convertToHtml($string);
+        return (string) $converter->convertToHtml($string);
     }
 
     /**
@@ -410,7 +414,7 @@ class Str
     {
         preg_match($pattern, $subject, $matches);
 
-        if (!$matches) {
+        if (! $matches) {
             return '';
         }
 
@@ -478,8 +482,8 @@ class Str
      * Parse a Class[@]method style callback into class and method.
      *
      * @param string $callback
-     * @param string|null $default
-     * @return array<int, string|null>
+     * @param null|string $default
+     * @return array<int, null|string>
      */
     public static function parseCallback($callback, $default = null)
     {
@@ -538,8 +542,6 @@ class Str
     /**
      * Repeat the given string.
      *
-     * @param string $string
-     * @param int $times
      * @return string
      */
     public static function repeat(string $string, int $times)
@@ -630,7 +632,7 @@ class Str
     /**
      * Remove any occurrence of the given string in the subject.
      *
-     * @param string|array<string> $search
+     * @param array<string>|string $search
      * @param string $subject
      * @param bool $caseSensitive
      * @return string
@@ -694,7 +696,7 @@ class Str
      *
      * @param string $title
      * @param string $separator
-     * @param string|null $language
+     * @param null|string $language
      * @return string
      */
     public static function slug($title, $separator = '-', $language = 'en')
@@ -733,7 +735,7 @@ class Str
             return static::$snakeCache[$key][$delimiter];
         }
 
-        if (!ctype_lower($value)) {
+        if (! ctype_lower($value)) {
             $value = preg_replace('/\s+/u', '', ucwords($value));
 
             $value = static::lower(preg_replace('/(.)(?=[A-Z])/u', '$1' . $delimiter, $value));
@@ -751,8 +753,8 @@ class Str
      */
     public static function startsWith($haystack, $needles)
     {
-        foreach ((array)$needles as $needle) {
-            if ((string)$needle !== '' && strncmp($haystack, $needle, strlen($needle)) === 0) {
+        foreach ((array) $needles as $needle) {
+            if ((string) $needle !== '' && strncmp($haystack, $needle, strlen($needle)) === 0) {
                 return true;
             }
         }
@@ -784,7 +786,7 @@ class Str
      *
      * @param string $string
      * @param int $start
-     * @param int|null $length
+     * @param null|int $length
      * @return string
      */
     public static function substr($string, $start, $length = null)
@@ -798,16 +800,15 @@ class Str
      * @param string $haystack
      * @param string $needle
      * @param int $offset
-     * @param int|null $length
+     * @param null|int $length
      * @return int
      */
     public static function substrCount($haystack, $needle, $offset = 0, $length = null)
     {
-        if (!is_null($length)) {
+        if (! is_null($length)) {
             return substr_count($haystack, $needle, $offset, $length);
-        } else {
-            return substr_count($haystack, $needle, $offset);
         }
+        return substr_count($haystack, $needle, $offset);
     }
 
     /**
@@ -855,7 +856,7 @@ class Str
             return call_user_func(static::$uuidFactory);
         }
 
-        $factory = new UuidFactory;
+        $factory = new UuidFactory();
 
         $factory->setRandomGenerator(new CombGenerator(
             $factory->getRandomGenerator(),
@@ -871,9 +872,6 @@ class Str
 
     /**
      * Set the callable that will be used to generate UUIDs.
-     *
-     * @param callable|null $factory
-     * @return void
      */
     public static function createUuidsUsing(callable $factory = null)
     {
@@ -882,8 +880,6 @@ class Str
 
     /**
      * Indicate that UUIDs should be created normally and not using a custom factory.
-     *
-     * @return void
      */
     public static function createUuidsNormally()
     {

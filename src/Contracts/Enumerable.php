@@ -1,5 +1,10 @@
 <?php
 
+declare(strict_types=1);
+/**
+ * @link     https://github.com/topyao/max-utils
+ * @homepage https://github.com/topyao
+ */
 namespace Max\Utils\Contracts;
 
 use Countable;
@@ -8,8 +13,6 @@ use InvalidArgumentException;
 use IteratorAggregate;
 use JsonSerializable;
 use Max\Utils\Collection;
-use Max\Utils\Contracts\Arrayable;
-use Max\Utils\Contracts\Jsonable;
 
 /**
  * Most of the methods in this file come from illuminate/support,
@@ -17,6 +20,20 @@ use Max\Utils\Contracts\Jsonable;
  */
 interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, JsonSerializable
 {
+    /**
+     * Convert the collection to its string representation.
+     */
+    public function __toString(): string;
+
+    /**
+     * Dynamically access collection proxies.
+     *
+     * @param string $key
+     * @throws Exception
+     * @return mixed
+     */
+    public function __get($key);
+
     /**
      * Create a new collection instance if the value isn't one already.
      *
@@ -29,7 +46,6 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
      * Create a new instance by invoking the callback a given amount of times.
      *
      * @param int $number
-     * @param callable|null $callback
      * @return static
      */
     public static function times($number, callable $callback = null);
@@ -76,7 +92,7 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
     /**
      * Alias for the "avg" method.
      *
-     * @param callable|string|null $callback
+     * @param null|callable|string $callback
      * @return mixed
      */
     public function average($callback = null);
@@ -84,7 +100,7 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
     /**
      * Get the median of a given key.
      *
-     * @param string|array|null $key
+     * @param null|array|string $key
      * @return mixed
      */
     public function median($key = null);
@@ -92,8 +108,8 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
     /**
      * Get the mode of a given key.
      *
-     * @param string|array|null $key
-     * @return array|null
+     * @param null|array|string $key
+     * @return null|array
      */
     public function mode($key = null);
 
@@ -126,7 +142,7 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
     /**
      * Get the average value of a given key.
      *
-     * @param callable|string|null $callback
+     * @param null|callable|string $callback
      * @return mixed
      */
     public function avg($callback = null);
@@ -153,7 +169,6 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
      * Dump the collection and end the script.
      *
      * @param mixed ...$args
-     * @return void
      */
     public function dd(...$args);
 
@@ -176,7 +191,6 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
      * Get the items that are not present in the given items, using the callback.
      *
      * @param mixed $items
-     * @param callable $callback
      * @return static
      */
     public function diffUsing($items, callable $callback);
@@ -193,7 +207,6 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
      * Get the items whose keys and values are not present in the given items, using the callback.
      *
      * @param mixed $items
-     * @param callable $callback
      * @return static
      */
     public function diffAssocUsing($items, callable $callback);
@@ -210,7 +223,6 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
      * Get the items whose keys are not present in the given items, using the callback.
      *
      * @param mixed $items
-     * @param callable $callback
      * @return static
      */
     public function diffKeysUsing($items, callable $callback);
@@ -218,7 +230,7 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
     /**
      * Retrieve duplicate items.
      *
-     * @param callable|string|null $callback
+     * @param null|callable|string $callback
      * @param bool $strict
      * @return static
      */
@@ -227,7 +239,7 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
     /**
      * Retrieve duplicate items using strict comparison.
      *
-     * @param callable|string|null $callback
+     * @param null|callable|string $callback
      * @return static
      */
     public function duplicatesStrict($callback = null);
@@ -235,7 +247,6 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
     /**
      * Execute a callback over each item.
      *
-     * @param callable $callback
      * @return $this
      */
     public function each(callable $callback);
@@ -243,7 +254,6 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
     /**
      * Execute a callback over each nested chunk of items.
      *
-     * @param callable $callback
      * @return static
      */
     public function eachSpread(callable $callback);
@@ -251,7 +261,7 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
     /**
      * Determine if all items pass the given truth test.
      *
-     * @param string|callable $key
+     * @param callable|string $key
      * @param mixed $operator
      * @param mixed $value
      * @return bool
@@ -269,7 +279,6 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
     /**
      * Run a filter over each of the items.
      *
-     * @param callable|null $callback
      * @return static
      */
     public function filter(callable $callback = null);
@@ -278,27 +287,21 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
      * Apply the callback if the value is truthy.
      *
      * @param bool $value
-     * @param callable $callback
-     * @param callable|null $default
-     * @return static|mixed
+     * @return mixed|static
      */
     public function when($value, callable $callback, callable $default = null);
 
     /**
      * Apply the callback if the collection is empty.
      *
-     * @param callable $callback
-     * @param callable|null $default
-     * @return static|mixed
+     * @return mixed|static
      */
     public function whenEmpty(callable $callback, callable $default = null);
 
     /**
      * Apply the callback if the collection is not empty.
      *
-     * @param callable $callback
-     * @param callable|null $default
-     * @return static|mixed
+     * @return mixed|static
      */
     public function whenNotEmpty(callable $callback, callable $default = null);
 
@@ -306,27 +309,21 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
      * Apply the callback if the value is falsy.
      *
      * @param bool $value
-     * @param callable $callback
-     * @param callable|null $default
-     * @return static|mixed
+     * @return mixed|static
      */
     public function unless($value, callable $callback, callable $default = null);
 
     /**
      * Apply the callback unless the collection is empty.
      *
-     * @param callable $callback
-     * @param callable|null $default
-     * @return static|mixed
+     * @return mixed|static
      */
     public function unlessEmpty(callable $callback, callable $default = null);
 
     /**
      * Apply the callback unless the collection is not empty.
      *
-     * @param callable $callback
-     * @param callable|null $default
-     * @return static|mixed
+     * @return mixed|static
      */
     public function unlessNotEmpty(callable $callback, callable $default = null);
 
@@ -343,7 +340,7 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
     /**
      * Filter items where the value for the given key is null.
      *
-     * @param string|null $key
+     * @param null|string $key
      * @return static
      */
     public function whereNull($key = null);
@@ -351,7 +348,7 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
     /**
      * Filter items where the value for the given key is not null.
      *
-     * @param string|null $key
+     * @param null|string $key
      * @return static
      */
     public function whereNotNull($key = null);
@@ -432,7 +429,6 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
     /**
      * Get the first item from the enumerable passing the given truth test.
      *
-     * @param callable|null $callback
      * @param mixed $default
      * @return mixed
      */
@@ -501,7 +497,7 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
      * Concatenate values of a given key as a string.
      *
      * @param string $value
-     * @param string|null $glue
+     * @param null|string $glue
      * @return string
      */
     public function implode($value, $glue = null);
@@ -555,7 +551,6 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
     /**
      * Get the last item from the collection.
      *
-     * @param callable|null $callback
      * @param mixed $default
      * @return mixed
      */
@@ -564,7 +559,6 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
     /**
      * Run a map over each of the items.
      *
-     * @param callable $callback
      * @return static
      */
     public function map(callable $callback);
@@ -572,7 +566,6 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
     /**
      * Run a map over each nested chunk of items.
      *
-     * @param callable $callback
      * @return static
      */
     public function mapSpread(callable $callback);
@@ -582,7 +575,6 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
      *
      * The callback should return an associative array with a single key/value pair.
      *
-     * @param callable $callback
      * @return static
      */
     public function mapToDictionary(callable $callback);
@@ -592,7 +584,6 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
      *
      * The callback should return an associative array with a single key/value pair.
      *
-     * @param callable $callback
      * @return static
      */
     public function mapToGroups(callable $callback);
@@ -602,7 +593,6 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
      *
      * The callback should return an associative array with a single key/value pair.
      *
-     * @param callable $callback
      * @return static
      */
     public function mapWithKeys(callable $callback);
@@ -610,7 +600,6 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
     /**
      * Map a collection and flatten the result by a single level.
      *
-     * @param callable $callback
      * @return static
      */
     public function flatMap(callable $callback);
@@ -658,7 +647,7 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
     /**
      * Get the min value of a given key.
      *
-     * @param callable|string|null $callback
+     * @param null|callable|string $callback
      * @return mixed
      */
     public function min($callback = null);
@@ -666,7 +655,7 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
     /**
      * Get the max value of a given key.
      *
-     * @param callable|string|null $callback
+     * @param null|callable|string $callback
      * @return mixed
      */
     public function max($callback = null);
@@ -718,17 +707,15 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
     /**
      * Get one or a specified number of items randomly from the collection.
      *
-     * @param int|null $number
-     * @return static|mixed
-     *
+     * @param null|int $number
      * @throws InvalidArgumentException
+     * @return mixed|static
      */
     public function random($number = null);
 
     /**
      * Reduce the collection to a single value.
      *
-     * @param callable $callback
      * @param mixed $initial
      * @return mixed
      */
@@ -769,7 +756,7 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
     /**
      * Shuffle the items in the collection.
      *
-     * @param int|null $seed
+     * @param null|int $seed
      * @return static
      */
     public function shuffle($seed = null);
@@ -802,7 +789,7 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
      * Get a slice of items from the enumerable.
      *
      * @param int $offset
-     * @param int|null $length
+     * @param null|int $length
      * @return static
      */
     public function slice($offset, $length = null);
@@ -826,7 +813,6 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
     /**
      * Chunk the collection into chunks with a callback.
      *
-     * @param callable $callback
      * @return static
      */
     public function chunkWhile(callable $callback);
@@ -834,7 +820,7 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
     /**
      * Sort through each item with a callback.
      *
-     * @param callable|null|int $callback
+     * @param null|callable|int $callback
      * @return static
      */
     public function sort($callback = null);
@@ -886,7 +872,7 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
     /**
      * Get the sum of the given values.
      *
-     * @param callable|string|null $callback
+     * @param null|callable|string $callback
      * @return mixed
      */
     public function sum($callback = null);
@@ -918,7 +904,6 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
     /**
      * Pass the collection to the given callback and then return it.
      *
-     * @param callable $callback
      * @return $this
      */
     public function tap(callable $callback);
@@ -926,7 +911,6 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
     /**
      * Pass the enumerable to the given callback and return the result.
      *
-     * @param callable $callback
      * @return mixed
      */
     public function pipe(callable $callback);
@@ -934,8 +918,8 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
     /**
      * Get the values of a given key.
      *
-     * @param string|array $value
-     * @param string|null $key
+     * @param array|string $value
+     * @param null|string $key
      * @return static
      */
     public function pluck($value, $key = null);
@@ -951,7 +935,7 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
     /**
      * Return only unique items from the collection array.
      *
-     * @param string|callable|null $key
+     * @param null|callable|string $key
      * @param bool $strict
      * @return static
      */
@@ -960,7 +944,7 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
     /**
      * Return only unique items from the collection array using strict comparison.
      *
-     * @param string|callable|null $key
+     * @param null|callable|string $key
      * @return static
      */
     public function uniqueStrict($key = null);
@@ -984,7 +968,7 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
     /**
      * Count the number of items in the collection using a given truth test.
      *
-     * @param callable|null $callback
+     * @param null|callable $callback
      * @return static
      */
     public function countBy($callback = null);
@@ -1008,27 +992,9 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
     public function collect();
 
     /**
-     * Convert the collection to its string representation.
-     *
-     * @return string
-     */
-    public function __toString(): string;
-
-    /**
      * Add a method to the list of proxied methods.
      *
      * @param string $method
-     * @return void
      */
     public static function proxy($method);
-
-    /**
-     * Dynamically access collection proxies.
-     *
-     * @param string $key
-     * @return mixed
-     *
-     * @throws Exception
-     */
-    public function __get($key);
 }

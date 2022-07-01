@@ -1,5 +1,10 @@
 <?php
 
+declare(strict_types=1);
+/**
+ * @link     https://github.com/topyao/max-utils
+ * @homepage https://github.com/topyao
+ */
 namespace Max\Utils\Traits;
 
 /**
@@ -11,7 +16,7 @@ trait Tappable
     /**
      * Call the given Closure with this instance then return the instance.
      *
-     * @param  callable|null  $callback
+     * @param null|callable $callback
      * @return mixed
      */
     public function tap($callback = null)

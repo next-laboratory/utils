@@ -1,5 +1,10 @@
 <?php
 
+declare(strict_types=1);
+/**
+ * @link     https://github.com/topyao/max-utils
+ * @homepage https://github.com/topyao
+ */
 namespace Max\Utils;
 
 use Closure;
@@ -12,31 +17,18 @@ use Psr\Container\ContainerInterface;
 class Pipeline
 {
     /**
-     * 容器
-     *
-     * @var ContainerInterface
+     * 容器.
      */
     protected ContainerInterface $container;
 
-    /**
-     * @var array
-     */
     protected array $pipes = [];
 
-    /**
-     * @var object
-     */
     protected object $passable;
 
-    /**
-     * @var string
-     */
     protected string $method = 'handle';
 
     /**
      * Pipeline constructor.
-     *
-     * @param ContainerInterface|null $container
      */
     public function __construct(?ContainerInterface $container = null)
     {
@@ -66,8 +58,6 @@ class Pipeline
     }
 
     /**
-     * @param array $pipes
-     *
      * @return $this
      */
     public function through(array $pipes): static
@@ -77,11 +67,6 @@ class Pipeline
         return $this;
     }
 
-    /**
-     * @param Closure $destination
-     *
-     * @return mixed
-     */
     public function then(Closure $destination): mixed
     {
         $pipeline = array_reduce(
@@ -92,32 +77,24 @@ class Pipeline
         return $pipeline($this->passable);
     }
 
-    /**
-     * @param Closure $destination
-     *
-     * @return Closure
-     */
     protected function prepareDestination(Closure $destination): Closure
     {
-        return static function($passable) use ($destination) {
+        return static function ($passable) use ($destination) {
             return $destination($passable);
         };
     }
 
-    /**
-     * @return Closure
-     */
     protected function carry(): Closure
     {
-        return function($stack, $pipe) {
-            return function($passable) use ($stack, $pipe) {
+        return function ($stack, $pipe) {
+            return function ($passable) use ($stack, $pipe) {
                 if (is_callable($pipe)) {
                     // If the pipe is an instance of a Closure, we will just call it directly but
                     // otherwise we'll resolve the pipes out of the container and call it with
                     // the appropriate method and arguments, returning the results back out.
                     return $pipe($passable, $stack);
                 }
-                if (!is_object($pipe)) {
+                if (! is_object($pipe)) {
                     [$name, $parameters] = $this->parsePipeString($pipe);
 
                     // If the pipe is a string we will parse the string and resolve the class out
@@ -142,10 +119,6 @@ class Pipeline
 
     /**
      * Parse full pipe string to get name and parameters.
-     *
-     * @param string $pipe
-     *
-     * @return array
      */
     protected function parsePipeString(string $pipe): array
     {
@@ -160,10 +133,6 @@ class Pipeline
 
     /**
      * Handle the value returned from each pipe before passing it to the next.
-     *
-     * @param mixed $carry
-     *
-     * @return mixed
      */
     protected function handleCarry(mixed $carry): mixed
     {

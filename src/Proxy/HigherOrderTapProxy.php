@@ -1,5 +1,10 @@
 <?php
 
+declare(strict_types=1);
+/**
+ * @link     https://github.com/topyao/max-utils
+ * @homepage https://github.com/topyao
+ */
 namespace Max\Utils\Proxy;
 
 /**
@@ -19,7 +24,6 @@ class HigherOrderTapProxy
      * Create a new tap proxy instance.
      *
      * @param mixed $target
-     * @return void
      */
     public function __construct($target)
     {

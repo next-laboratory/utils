@@ -1,5 +1,10 @@
 <?php
 
+declare(strict_types=1);
+/**
+ * @link     https://github.com/topyao/max-utils
+ * @homepage https://github.com/topyao
+ */
 namespace Max\Utils\Packer;
 
 use Max\Utils\Contracts\PackerInterface;
@@ -10,8 +15,6 @@ class PhpSerializePacker implements PackerInterface
 {
     /**
      * @param $data
-     *
-     * @return string
      */
     public function pack($data): string
     {
@@ -19,8 +22,6 @@ class PhpSerializePacker implements PackerInterface
     }
 
     /**
-     * @param string $data
-     *
      * @return mixed
      */
     public function unpack(string $data)

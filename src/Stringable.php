@@ -1,12 +1,17 @@
 <?php
 
+declare(strict_types=1);
+/**
+ * @link     https://github.com/topyao/max-utils
+ * @homepage https://github.com/topyao
+ */
 namespace Max\Utils;
 
 use Closure;
+use JsonSerializable;
 use Max\Utils\Traits\Conditionable;
 use Max\Utils\Traits\Macroable;
 use Max\Utils\Traits\Tappable;
-use JsonSerializable;
 use Symfony\Component\VarDumper\VarDumper;
 
 /**
@@ -15,7 +20,9 @@ use Symfony\Component\VarDumper\VarDumper;
  */
 class Stringable implements JsonSerializable
 {
-    use Conditionable, Macroable, Tappable;
+    use Conditionable;
+    use Macroable;
+    use Tappable;
 
     /**
      * The underlying string value.
@@ -28,11 +35,31 @@ class Stringable implements JsonSerializable
      * Create a new instance of the class.
      *
      * @param string $value
-     * @return void
      */
     public function __construct($value = '')
     {
-        $this->value = (string)$value;
+        $this->value = (string) $value;
+    }
+
+    /**
+     * Proxy dynamic properties onto methods.
+     *
+     * @param string $key
+     * @return mixed
+     */
+    public function __get($key)
+    {
+        return $this->{$key}();
+    }
+
+    /**
+     * Get the raw string value.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->value;
     }
 
     /**
@@ -147,7 +174,7 @@ class Stringable implements JsonSerializable
     /**
      * Determine if a given string contains a given substring.
      *
-     * @param string|array $needles
+     * @param array|string $needles
      * @return bool
      */
     public function contains($needles)
@@ -158,7 +185,6 @@ class Stringable implements JsonSerializable
     /**
      * Determine if a given string contains all array values.
      *
-     * @param array $needles
      * @return bool
      */
     public function containsAll(array $needles)
@@ -180,7 +206,7 @@ class Stringable implements JsonSerializable
     /**
      * Determine if a given string ends with a given substring.
      *
-     * @param string|array $needles
+     * @param array|string $needles
      * @return bool
      */
     public function endsWith($needles)
@@ -214,7 +240,7 @@ class Stringable implements JsonSerializable
     /**
      * Split a string using a regular expression or by length.
      *
-     * @param string|int $pattern
+     * @param int|string $pattern
      * @param int $limit
      * @param int $flags
      * @return Collection
@@ -227,7 +253,7 @@ class Stringable implements JsonSerializable
 
         $segments = preg_split($pattern, $this->value, $limit, $flags);
 
-        return !empty($segments) ? collect($segments) : collect();
+        return ! empty($segments) ? collect($segments) : collect();
     }
 
     /**
@@ -244,7 +270,7 @@ class Stringable implements JsonSerializable
     /**
      * Determine if a given string matches a given pattern.
      *
-     * @param string|array $pattern
+     * @param array|string $pattern
      * @return bool
      */
     public function is($pattern)
@@ -279,7 +305,7 @@ class Stringable implements JsonSerializable
      */
     public function isNotEmpty()
     {
-        return !$this->isEmpty();
+        return ! $this->isEmpty();
     }
 
     /**
@@ -328,7 +354,6 @@ class Stringable implements JsonSerializable
     /**
      * Convert GitHub flavored Markdown into HTML.
      *
-     * @param array $options
      * @return static
      */
     public function markdown(array $options = [])
@@ -408,7 +433,7 @@ class Stringable implements JsonSerializable
     /**
      * Parse a Class@method style callback into class and method.
      *
-     * @param string|null $default
+     * @param null|string $default
      * @return array
      */
     public function parseCallback($default = null)
@@ -419,7 +444,6 @@ class Stringable implements JsonSerializable
     /**
      * Call the given callback and return a new string.
      *
-     * @param callable $callback
      * @return static
      */
     public function pipe(callable $callback)
@@ -463,7 +487,7 @@ class Stringable implements JsonSerializable
     /**
      * Remove any occurrence of the given string in the subject.
      *
-     * @param string|array<string> $search
+     * @param array<string>|string $search
      * @param bool $caseSensitive
      * @return static
      */
@@ -475,7 +499,6 @@ class Stringable implements JsonSerializable
     /**
      * Repeat the string.
      *
-     * @param int $times
      * @return static
      */
     public function repeat(int $times)
@@ -499,7 +522,6 @@ class Stringable implements JsonSerializable
      * Replace a given value in the string sequentially with an array.
      *
      * @param string $search
-     * @param array $replace
      * @return static
      */
     public function replaceArray($search, array $replace)
@@ -534,9 +556,9 @@ class Stringable implements JsonSerializable
     /**
      * Replace the patterns matching the given regular expression.
      *
-     * @param string         $pattern
+     * @param string $pattern
      * @param Closure|string $replace
-     * @param int            $limit
+     * @param int $limit
      * @return static
      */
     public function replaceMatches($pattern, $replace, $limit = -1)
@@ -593,7 +615,7 @@ class Stringable implements JsonSerializable
      * Generate a URL friendly "slug" from a given string.
      *
      * @param string $separator
-     * @param string|null $language
+     * @param null|string $language
      * @return static
      */
     public function slug($separator = '-', $language = 'en')
@@ -615,7 +637,7 @@ class Stringable implements JsonSerializable
     /**
      * Determine if a given string starts with a given substring.
      *
-     * @param string|array $needles
+     * @param array|string $needles
      * @return bool
      */
     public function startsWith($needles)
@@ -637,7 +659,7 @@ class Stringable implements JsonSerializable
      * Returns the portion of the string specified by the start and length parameters.
      *
      * @param int $start
-     * @param int|null $length
+     * @param null|int $length
      * @return static
      */
     public function substr($start, $length = null)
@@ -649,8 +671,8 @@ class Stringable implements JsonSerializable
      * Returns the number of substring occurrences.
      *
      * @param string $needle
-     * @param int|null $offset
-     * @param int|null $length
+     * @param null|int $offset
+     * @param null|int $length
      * @return int
      */
     public function substrCount($needle, $offset = null, $length = null)
@@ -771,8 +793,6 @@ class Stringable implements JsonSerializable
 
     /**
      * Dump the string and end the script.
-     *
-     * @return void
      */
     public function dd()
     {
@@ -790,26 +810,5 @@ class Stringable implements JsonSerializable
     public function jsonSerialize()
     {
         return $this->__toString();
-    }
-
-    /**
-     * Proxy dynamic properties onto methods.
-     *
-     * @param string $key
-     * @return mixed
-     */
-    public function __get($key)
-    {
-        return $this->{$key}();
-    }
-
-    /**
-     * Get the raw string value.
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return (string)$this->value;
     }
 }

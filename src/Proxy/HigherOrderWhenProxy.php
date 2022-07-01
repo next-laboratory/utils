@@ -1,8 +1,13 @@
 <?php
 
+declare(strict_types=1);
+/**
+ * @link     https://github.com/topyao/max-utils
+ * @homepage https://github.com/topyao
+ */
 namespace Max\Utils\Proxy;
 
-/**
+/*
  * Most of the methods in this file come from illuminate
  * thanks Laravel Team provide such a useful class.
  */
@@ -32,13 +37,11 @@ class HigherOrderWhenProxy
     /**
      * Create a new proxy instance.
      *
-     * @param Enumerable $collection
      * @param bool $condition
-     * @return void
      */
     public function __construct(Enumerable $collection, $condition)
     {
-        $this->condition  = $condition;
+        $this->condition = $condition;
         $this->collection = $collection;
     }
 

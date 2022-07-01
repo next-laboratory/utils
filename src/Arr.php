@@ -1,6 +1,10 @@
 <?php
-declare(strict_types=1);
 
+declare(strict_types=1);
+/**
+ * @link     https://github.com/topyao/max-utils
+ * @homepage https://github.com/topyao
+ */
 namespace Max\Utils;
 
 use ArrayAccess;
@@ -44,7 +48,7 @@ class Arr
         foreach ($array as $values) {
             if ($values instanceof Collection) {
                 $values = $values->all();
-            } else if (!is_array($values)) {
+            } elseif (! is_array($values)) {
                 continue;
             }
             $results[] = $values;
@@ -65,7 +69,7 @@ class Arr
             foreach ($results as $product) {
                 foreach ($array as $item) {
                     $product[$index] = $item;
-                    $append[]        = $product;
+                    $append[] = $product;
                 }
             }
             $results = $append;
@@ -92,7 +96,7 @@ class Arr
     {
         $results = [];
         foreach ($array as $key => $value) {
-            if (is_array($value) && !empty($value)) {
+            if (is_array($value) && ! empty($value)) {
                 $results = array_merge($results, static::dot($value, $prepend . $key . '.'));
             } else {
                 $results[$prepend . $key] = $value;
@@ -116,7 +120,7 @@ class Arr
      * Determine if the given key exists in the provided array.
      *
      * @param array|ArrayAccess $array
-     * @param int|string        $key
+     * @param int|string $key
      */
     public static function exists($array, $key): bool
     {
@@ -172,9 +176,9 @@ class Arr
         $result = [];
         foreach ($array as $item) {
             $item = $item instanceof Collection ? $item->all() : $item;
-            if (!is_array($item)) {
+            if (! is_array($item)) {
                 $result[] = $item;
-            } else if ($depth === 1) {
+            } elseif ($depth === 1) {
                 $result = array_merge($result, array_values($item));
             } else {
                 $result = array_merge($result, static::flatten($item, $depth - 1));
@@ -191,7 +195,7 @@ class Arr
     public static function forget(array &$array, $keys): void
     {
         $original = &$array;
-        $keys     = (array)$keys;
+        $keys = (array) $keys;
         if (count($keys) === 0) {
             return;
         }
@@ -201,7 +205,7 @@ class Arr
                 unset($array[$key]);
                 continue;
             }
-            $parts = explode('.', (string)$key);
+            $parts = explode('.', (string) $key);
             // clean up before each pass
             $array = &$original;
             while (count($parts) > 1) {
@@ -220,12 +224,12 @@ class Arr
      * Get an item from an array using "dot" notation.
      *
      * @param array|ArrayAccess $array
-     * @param null|int|string   $key
-     * @param mixed             $default
+     * @param null|int|string $key
+     * @param mixed $default
      */
     public static function get($array, $key = null, $default = null)
     {
-        if (!static::accessible($array)) {
+        if (! static::accessible($array)) {
             return value($default);
         }
         if (is_null($key)) {
@@ -234,7 +238,7 @@ class Arr
         if (static::exists($array, $key)) {
             return $array[$key];
         }
-        if (!is_string($key) || strpos($key, '.') === false) {
+        if (! is_string($key) || strpos($key, '.') === false) {
             return $array[$key] ?? value($default);
         }
         foreach (explode('.', $key) as $segment) {
@@ -258,8 +262,8 @@ class Arr
         if (is_null($keys)) {
             return false;
         }
-        $keys = (array)$keys;
-        if (!$array) {
+        $keys = (array) $keys;
+        if (! $array) {
             return false;
         }
         if ($keys === []) {
@@ -298,13 +302,13 @@ class Arr
      */
     public static function only(array $array, $keys): array
     {
-        return array_intersect_key($array, array_flip((array)$keys));
+        return array_intersect_key($array, array_flip((array) $keys));
     }
 
     /**
      * Pluck an array of values from an array.
      *
-     * @param array|string      $value
+     * @param array|string $value
      * @param null|array|string $key
      */
     public static function pluck(array $array, $value, $key = null): array
@@ -321,7 +325,7 @@ class Arr
             } else {
                 $itemKey = data_get($item, $key);
                 if (is_object($itemKey) && method_exists($itemKey, '__toString')) {
-                    $itemKey = (string)$itemKey;
+                    $itemKey = (string) $itemKey;
                 }
                 $results[$itemKey] = $itemValue;
             }
@@ -333,7 +337,7 @@ class Arr
      * Push an item onto the beginning of an array.
      *
      * @param null|mixed $key
-     * @param mixed      $value
+     * @param mixed $value
      */
     public static function prepend(array $array, $value, $key = null): array
     {
@@ -365,19 +369,19 @@ class Arr
     public static function random(array $array, int $number = null)
     {
         $requested = is_null($number) ? 1 : $number;
-        $count     = count($array);
+        $count = count($array);
         if ($requested > $count) {
             throw new InvalidArgumentException("You requested {$requested} items, but there are only {$count} items available.");
         }
         if (is_null($number)) {
             return $array[array_rand($array)];
         }
-        if ((int)$number === 0) {
+        if ((int) $number === 0) {
             return [];
         }
-        $keys    = array_rand($array, $number);
+        $keys = array_rand($array, $number);
         $results = [];
-        foreach ((array)$keys as $key) {
+        foreach ((array) $keys as $key) {
             $results[] = $array[$key];
         }
         return $results;
@@ -388,14 +392,14 @@ class Arr
      * If no key is given to the method, the entire array will be replaced.
      *
      * @param null|int|string $key
-     * @param mixed           $value
+     * @param mixed $value
      */
     public static function set(array &$array, $key, $value): array
     {
         if (is_null($key)) {
             return $array = $value;
         }
-        if (!is_string($key)) {
+        if (! is_string($key)) {
             $array[$key] = $value;
             return $array;
         }
@@ -405,7 +409,7 @@ class Arr
             // If the key doesn't exist at this depth, we will just create an empty array
             // to hold the next value, allowing us to create the arrays to hold final
             // values at the correct depth. Then we'll keep digging into the array.
-            if (!isset($array[$key]) || !is_array($array[$key])) {
+            if (! isset($array[$key]) || ! is_array($array[$key])) {
                 $array[$key] = [];
             }
             $array = &$array[$key];
@@ -423,7 +427,7 @@ class Arr
             shuffle($array);
         } else {
             srand($seed);
-            usort($array, function() {
+            usort($array, function () {
                 return rand(-1, 1);
             });
         }
@@ -484,7 +488,7 @@ class Arr
         if (is_null($value)) {
             return [];
         }
-        return !is_array($value) ? [$value] : $value;
+        return ! is_array($value) ? [$value] : $value;
     }
 
     /**
@@ -501,7 +505,7 @@ class Arr
             }
         }
 
-        if (!self::isAssoc($result)) {
+        if (! self::isAssoc($result)) {
             return array_unique($result);
         }
 
@@ -535,13 +539,13 @@ class Arr
     /**
      * Explode the "value" and "key" arguments passed to "pluck".
      *
-     * @param array|string      $value
+     * @param array|string $value
      * @param null|array|string $key
      */
     protected static function explodePluckParameters($value, $key): array
     {
         $value = is_string($value) ? explode('.', $value) : $value;
-        $key   = is_null($key) || is_array($key) ? $key : explode('.', $key);
+        $key = is_null($key) || is_array($key) ? $key : explode('.', $key);
         return [$value, $key];
     }
 }

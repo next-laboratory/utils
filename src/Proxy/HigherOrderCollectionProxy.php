@@ -1,6 +1,10 @@
 <?php
-declare(strict_types=1);
 
+declare(strict_types=1);
+/**
+ * @link     https://github.com/topyao/max-utils
+ * @homepage https://github.com/topyao
+ */
 namespace Max\Utils\Proxy;
 
 use Max\Utils\Collection;
@@ -31,7 +35,7 @@ class HigherOrderCollectionProxy
      */
     public function __construct(Collection $collection, string $method)
     {
-        $this->method     = $method;
+        $this->method = $method;
         $this->collection = $collection;
     }
 

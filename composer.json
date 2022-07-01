@@ -20,13 +20,28 @@
             "Max\\Utils\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Max\\UtilsTest\\": "tests"
+        }
+    },
     "require": {
         "php": "^7.4|^8.0",
         "ramsey/uuid": "^4.2",
         "symfony/mime": "*",
         "voku/portable-ascii": "^1.5",
         "league/commonmark": "^2.0",
-        "symfony/finder": "*"
+        "symfony/finder": "*",
+        "ext-json": "*",
+        "phpunit/phpunit": "^9.5",
+        "mockery/mockery": "^1.0",
+        "phpstan/phpstan": "^1.0",
+        "friendsofphp/php-cs-fixer": "^3.0"
+    },
+    "scripts": {
+        "test": "phpunit -c phpunit.xml --colors=always",
+        "analyse": "phpstan analyse --memory-limit 1024M -l 0 ./src",
+        "cs-fix": "php-cs-fixer fix $1"
     },
     "suggest": {
         "symfony/var-dumper": "*"

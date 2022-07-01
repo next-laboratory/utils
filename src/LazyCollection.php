@@ -1,5 +1,10 @@
 <?php
 
+declare(strict_types=1);
+/**
+ * @link     https://github.com/topyao/max-utils
+ * @homepage https://github.com/topyao
+ */
 namespace Max\Utils;
 
 use ArrayIterator;
@@ -22,7 +27,8 @@ use Traversable;
  */
 class LazyCollection implements Enumerable
 {
-    use EnumeratesValues, Macroable;
+    use EnumeratesValues;
+    use Macroable;
 
     /**
      * The source from which to generate items.
@@ -35,7 +41,6 @@ class LazyCollection implements Enumerable
      * Create a new lazy collection instance.
      *
      * @param mixed $source
-     * @return void
      */
     public function __construct($source = null)
     {
@@ -59,11 +64,11 @@ class LazyCollection implements Enumerable
     {
         return new static(function () use ($from, $to) {
             if ($from <= $to) {
-                for (; $from <= $to; $from++) {
+                for (; $from <= $to; ++$from) {
                     yield $from;
                 }
             } else {
-                for (; $from >= $to; $from--) {
+                for (; $from >= $to; --$from) {
                     yield $from;
                 }
             }
@@ -108,7 +113,7 @@ class LazyCollection implements Enumerable
         $cache = [];
 
         return new static(function () use ($iterator, &$iteratorIndex, &$cache) {
-            for ($index = 0; true; $index++) {
+            for ($index = 0; true; ++$index) {
                 if (array_key_exists($index, $cache)) {
                     yield $cache[$index][0] => $cache[$index][1];
 
@@ -118,10 +123,10 @@ class LazyCollection implements Enumerable
                 if ($iteratorIndex < $index) {
                     $iterator->next();
 
-                    $iteratorIndex++;
+                    ++$iteratorIndex;
                 }
 
-                if (!$iterator->valid()) {
+                if (! $iterator->valid()) {
                     break;
                 }
 
@@ -135,7 +140,7 @@ class LazyCollection implements Enumerable
     /**
      * Get the average value of a given key.
      *
-     * @param callable|string|null $callback
+     * @param null|callable|string $callback
      * @return mixed
      */
     public function avg($callback = null)
@@ -146,7 +151,7 @@ class LazyCollection implements Enumerable
     /**
      * Get the median of a given key.
      *
-     * @param string|array|null $key
+     * @param null|array|string $key
      * @return mixed
      */
     public function median($key = null)
@@ -157,8 +162,8 @@ class LazyCollection implements Enumerable
     /**
      * Get the mode of a given key.
      *
-     * @param string|array|null $key
-     * @return array|null
+     * @param null|array|string $key
+     * @return null|array
      */
     public function mode($key = null)
     {
@@ -194,7 +199,7 @@ class LazyCollection implements Enumerable
     public function contains($key, $operator = null, $value = null)
     {
         if (func_num_args() === 1 && $this->useAsCallable($key)) {
-            $placeholder = new stdClass;
+            $placeholder = new stdClass();
 
             return $this->first($key, $placeholder) !== $placeholder;
         }
@@ -247,7 +252,7 @@ class LazyCollection implements Enumerable
                     $counts[$group] = 0;
                 }
 
-                $counts[$group]++;
+                ++$counts[$group];
             }
 
             yield from $counts;
@@ -269,7 +274,6 @@ class LazyCollection implements Enumerable
      * Get the items that are not present in the given items, using the callback.
      *
      * @param mixed $items
-     * @param callable $callback
      * @return static
      */
     public function diffUsing($items, callable $callback)
@@ -292,7 +296,6 @@ class LazyCollection implements Enumerable
      * Get the items whose keys and values are not present in the given items, using the callback.
      *
      * @param mixed $items
-     * @param callable $callback
      * @return static
      */
     public function diffAssocUsing($items, callable $callback)
@@ -315,7 +318,6 @@ class LazyCollection implements Enumerable
      * Get the items whose keys are not present in the given items, using the callback.
      *
      * @param mixed $items
-     * @param callable $callback
      * @return static
      */
     public function diffKeysUsing($items, callable $callback)
@@ -326,7 +328,7 @@ class LazyCollection implements Enumerable
     /**
      * Retrieve duplicate items.
      *
-     * @param callable|string|null $callback
+     * @param null|callable|string $callback
      * @param bool $strict
      * @return static
      */
@@ -338,7 +340,7 @@ class LazyCollection implements Enumerable
     /**
      * Retrieve duplicate items using strict comparison.
      *
-     * @param callable|string|null $callback
+     * @param null|callable|string $callback
      * @return static
      */
     public function duplicatesStrict($callback = null)
@@ -360,14 +362,13 @@ class LazyCollection implements Enumerable
     /**
      * Run a filter over each of the items.
      *
-     * @param callable|null $callback
      * @return static
      */
     public function filter(callable $callback = null)
     {
         if (is_null($callback)) {
             $callback = function ($value) {
-                return (bool)$value;
+                return (bool) $value;
             };
         }
 
@@ -383,7 +384,6 @@ class LazyCollection implements Enumerable
     /**
      * Get the first item from the enumerable passing the given truth test.
      *
-     * @param callable|null $callback
      * @param mixed $default
      * @return mixed
      */
@@ -392,7 +392,7 @@ class LazyCollection implements Enumerable
         $iterator = $this->getIterator();
 
         if (is_null($callback)) {
-            if (!$iterator->valid()) {
+            if (! $iterator->valid()) {
                 return value($default);
             }
 
@@ -418,7 +418,7 @@ class LazyCollection implements Enumerable
     {
         $instance = new static(function () use ($depth) {
             foreach ($this as $item) {
-                if (!is_array($item) && !$item instanceof Enumerable) {
+                if (! is_array($item) && ! $item instanceof Enumerable) {
                     yield $item;
                 } elseif ($depth === 1) {
                     yield from $item;
@@ -494,7 +494,7 @@ class LazyCollection implements Enumerable
                 $resolvedKey = $keyBy($item, $key);
 
                 if (is_object($resolvedKey)) {
-                    $resolvedKey = (string)$resolvedKey;
+                    $resolvedKey = (string) $resolvedKey;
                 }
 
                 yield $resolvedKey => $item;
@@ -510,7 +510,7 @@ class LazyCollection implements Enumerable
      */
     public function has($key)
     {
-        $keys  = array_flip(is_array($key) ? $key : func_get_args());
+        $keys = array_flip(is_array($key) ? $key : func_get_args());
         $count = count($keys);
 
         foreach ($this as $key => $value) {
@@ -526,7 +526,7 @@ class LazyCollection implements Enumerable
      * Concatenate values of a given key as a string.
      *
      * @param string $value
-     * @param string|null $glue
+     * @param null|string $glue
      * @return string
      */
     public function implode($value, $glue = null)
@@ -563,7 +563,7 @@ class LazyCollection implements Enumerable
      */
     public function isEmpty()
     {
-        return !$this->getIterator()->valid();
+        return ! $this->getIterator()->valid();
     }
 
     /**
@@ -605,13 +605,12 @@ class LazyCollection implements Enumerable
     /**
      * Get the last item from the collection.
      *
-     * @param callable|null $callback
      * @param mixed $default
      * @return mixed
      */
     public function last(callable $callback = null, $default = null)
     {
-        $needle = $placeholder = new stdClass;
+        $needle = $placeholder = new stdClass();
 
         foreach ($this as $key => $value) {
             if (is_null($callback) || $callback($value, $key)) {
@@ -625,8 +624,8 @@ class LazyCollection implements Enumerable
     /**
      * Get the values of a given key.
      *
-     * @param string|array $value
-     * @param string|null $key
+     * @param array|string $value
+     * @param null|string $key
      * @return static
      */
     public function pluck($value, $key = null)
@@ -643,7 +642,7 @@ class LazyCollection implements Enumerable
                     $itemKey = data_get($item, $key);
 
                     if (is_object($itemKey) && method_exists($itemKey, '__toString')) {
-                        $itemKey = (string)$itemKey;
+                        $itemKey = (string) $itemKey;
                     }
 
                     yield $itemKey => $itemValue;
@@ -655,7 +654,6 @@ class LazyCollection implements Enumerable
     /**
      * Run a map over each of the items.
      *
-     * @param callable $callback
      * @return static
      */
     public function map(callable $callback)
@@ -672,7 +670,6 @@ class LazyCollection implements Enumerable
      *
      * The callback should return an associative array with a single key/value pair.
      *
-     * @param callable $callback
      * @return static
      */
     public function mapToDictionary(callable $callback)
@@ -685,7 +682,6 @@ class LazyCollection implements Enumerable
      *
      * The callback should return an associative array with a single key/value pair.
      *
-     * @param callable $callback
      * @return static
      */
     public function mapWithKeys(callable $callback)
@@ -733,7 +729,7 @@ class LazyCollection implements Enumerable
             $errorMessage = 'Both parameters should have an equal number of elements';
 
             foreach ($this as $key) {
-                if (!$values->valid()) {
+                if (! $values->valid()) {
                     trigger_error($errorMessage, E_USER_WARNING);
 
                     break;
@@ -778,7 +774,7 @@ class LazyCollection implements Enumerable
                     yield $item;
                 }
 
-                $position++;
+                ++$position;
             }
         });
     }
@@ -793,7 +789,7 @@ class LazyCollection implements Enumerable
     {
         if ($keys instanceof Enumerable) {
             $keys = $keys->all();
-        } elseif (!is_null($keys)) {
+        } elseif (! is_null($keys)) {
             $keys = is_array($keys) ? $keys : func_get_args();
         }
 
@@ -835,10 +831,9 @@ class LazyCollection implements Enumerable
     /**
      * Get one or a specified number of items randomly from the collection.
      *
-     * @param int|null $number
-     * @return static|mixed
-     *
+     * @param null|int $number
      * @throws InvalidArgumentException
+     * @return mixed|static
      */
     public function random($number = null)
     {
@@ -922,7 +917,7 @@ class LazyCollection implements Enumerable
     /**
      * Shuffle the items in the collection.
      *
-     * @param int|null $seed
+     * @param null|int $seed
      * @return static
      */
     public function shuffle($seed = null)
@@ -958,7 +953,7 @@ class LazyCollection implements Enumerable
                     if ($step > $size) {
                         $skip = $step - $size;
 
-                        for ($i = 0; $i < $skip && $iterator->valid(); $i++) {
+                        for ($i = 0; $i < $skip && $iterator->valid(); ++$i) {
                             $iterator->next();
                         }
                     }
@@ -1034,7 +1029,7 @@ class LazyCollection implements Enumerable
      * Get a slice of items from the enumerable.
      *
      * @param int $offset
-     * @param int|null $length
+     * @param null|int $length
      * @return static
      */
     public function slice($offset, $length = null)
@@ -1065,10 +1060,9 @@ class LazyCollection implements Enumerable
      * @param mixed $key
      * @param mixed $operator
      * @param mixed $value
-     * @return mixed
-     *
      * @throws ItemNotFoundException
      * @throws MultipleItemsFoundException
+     * @return mixed
      */
     public function sole($key = null, $operator = null, $value = null)
     {
@@ -1108,7 +1102,7 @@ class LazyCollection implements Enumerable
                     if (count($chunk) < $size) {
                         $iterator->next();
 
-                        if (!$iterator->valid()) {
+                        if (! $iterator->valid()) {
                             break;
                         }
                     } else {
@@ -1137,7 +1131,6 @@ class LazyCollection implements Enumerable
     /**
      * Chunk the collection into chunks with a callback.
      *
-     * @param callable $callback
      * @return static
      */
     public function chunkWhile(callable $callback)
@@ -1145,7 +1138,7 @@ class LazyCollection implements Enumerable
         return new static(function () use ($callback) {
             $iterator = $this->getIterator();
 
-            $chunk = new Collection;
+            $chunk = new Collection();
 
             if ($iterator->valid()) {
                 $chunk[$iterator->key()] = $iterator->current();
@@ -1154,10 +1147,10 @@ class LazyCollection implements Enumerable
             }
 
             while ($iterator->valid()) {
-                if (!$callback($iterator->current(), $iterator->key(), $chunk)) {
+                if (! $callback($iterator->current(), $iterator->key(), $chunk)) {
                     yield new static($chunk);
 
-                    $chunk = new Collection;
+                    $chunk = new Collection();
                 }
 
                 $chunk[$iterator->key()] = $iterator->current();
@@ -1174,7 +1167,7 @@ class LazyCollection implements Enumerable
     /**
      * Sort through each item with a callback.
      *
-     * @param callable|null|int $callback
+     * @param null|callable|int $callback
      * @return static
      */
     public function sort($callback = null)
@@ -1257,7 +1250,7 @@ class LazyCollection implements Enumerable
             $iterator = $this->getIterator();
 
             while ($limit--) {
-                if (!$iterator->valid()) {
+                if (! $iterator->valid()) {
                     break;
                 }
 
@@ -1294,7 +1287,6 @@ class LazyCollection implements Enumerable
     /**
      * Take items in the collection until a given point in time.
      *
-     * @param DateTimeInterface $timeout
      * @return static
      */
     public function takeUntilTimeout(DateTimeInterface $timeout)
@@ -1317,14 +1309,13 @@ class LazyCollection implements Enumerable
         $callback = $this->useAsCallable($value) ? $value : $this->equality($value);
 
         return $this->takeUntil(function ($item, $key) use ($callback) {
-            return !$callback($item, $key);
+            return ! $callback($item, $key);
         });
     }
 
     /**
      * Pass each item in the collection to the given callback, lazily.
      *
-     * @param callable $callback
      * @return static
      */
     public function tapEach(callable $callback)
@@ -1397,7 +1388,7 @@ class LazyCollection implements Enumerable
             foreach ($this as $index => $item) {
                 yield $index => $item;
 
-                $yielded++;
+                ++$yielded;
             }
 
             while ($yielded++ < $size) {
@@ -1454,8 +1445,8 @@ class LazyCollection implements Enumerable
     /**
      * Explode the "value" and "key" arguments passed to "pluck".
      *
-     * @param string|array $value
-     * @param string|array|null $key
+     * @param array|string $value
+     * @param null|array|string $key
      * @return array
      */
     protected function explodePluckParameters($value, $key)
@@ -1471,13 +1462,12 @@ class LazyCollection implements Enumerable
      * Pass this lazy collection through a method on the collection class.
      *
      * @param string $method
-     * @param array $params
      * @return static
      */
     protected function passthru($method, array $params)
     {
         return new static(function () use ($method, $params) {
-            yield from $this->collect()->$method(...$params);
+            yield from $this->collect()->{$method}(...$params);
         });
     }
 

@@ -1,5 +1,10 @@
 <?php
 
+declare(strict_types=1);
+/**
+ * @link     https://github.com/topyao/max-utils
+ * @homepage https://github.com/topyao
+ */
 namespace Max\Utils;
 
 use ArrayAccess;
@@ -27,8 +32,7 @@ class Optional implements ArrayAccess
     /**
      * Create a new optional instance.
      *
-     * @param  mixed  $value
-     * @return void
+     * @param mixed $value
      */
     public function __construct($value)
     {
@@ -38,7 +42,7 @@ class Optional implements ArrayAccess
     /**
      * Dynamically access a property on the underlying object.
      *
-     * @param  string  $key
+     * @param string $key
      * @return mixed
      */
     public function __get($key)
@@ -51,7 +55,7 @@ class Optional implements ArrayAccess
     /**
      * Dynamically check a property exists on the underlying object.
      *
-     * @param  mixed  $name
+     * @param mixed $name
      * @return bool
      */
     public function __isset($name)
@@ -68,9 +72,27 @@ class Optional implements ArrayAccess
     }
 
     /**
+     * Dynamically pass a method to the underlying object.
+     *
+     * @param string $method
+     * @param array $parameters
+     * @return mixed
+     */
+    public function __call($method, $parameters)
+    {
+        if (static::hasMacro($method)) {
+            return $this->macroCall($method, $parameters);
+        }
+
+        if (is_object($this->value)) {
+            return $this->value->{$method}(...$parameters);
+        }
+    }
+
+    /**
      * Determine if an item exists at an offset.
      *
-     * @param  mixed  $key
+     * @param mixed $key
      * @return bool
      */
     #[ReturnTypeWillChange]
@@ -82,7 +104,7 @@ class Optional implements ArrayAccess
     /**
      * Get an item at a given offset.
      *
-     * @param  mixed  $key
+     * @param mixed $key
      * @return mixed
      */
     #[ReturnTypeWillChange]
@@ -94,9 +116,8 @@ class Optional implements ArrayAccess
     /**
      * Set the item at a given offset.
      *
-     * @param  mixed  $key
-     * @param  mixed  $value
-     * @return void
+     * @param mixed $key
+     * @param mixed $value
      */
     #[ReturnTypeWillChange]
     public function offsetSet($key, $value)
@@ -109,32 +130,13 @@ class Optional implements ArrayAccess
     /**
      * Unset the item at a given offset.
      *
-     * @param  string  $key
-     * @return void
+     * @param string $key
      */
     #[ReturnTypeWillChange]
     public function offsetUnset($key)
     {
         if (Arr::accessible($this->value)) {
             unset($this->value[$key]);
-        }
-    }
-
-    /**
-     * Dynamically pass a method to the underlying object.
-     *
-     * @param  string  $method
-     * @param  array  $parameters
-     * @return mixed
-     */
-    public function __call($method, $parameters)
-    {
-        if (static::hasMacro($method)) {
-            return $this->macroCall($method, $parameters);
-        }
-
-        if (is_object($this->value)) {
-            return $this->value->{$method}(...$parameters);
         }
     }
 }
