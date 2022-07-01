@@ -28,7 +28,6 @@ class Pluralizer
 
     /**
      * The cached inflector instance.
-     *
      */
     protected static $inflector;
 

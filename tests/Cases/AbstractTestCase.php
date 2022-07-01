@@ -7,6 +7,10 @@ declare(strict_types=1);
  */
 namespace Max\UtilsTest\Cases;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 class AbstractTestCase extends \PHPUnit\Framework\TestCase
 {
 }
